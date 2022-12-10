@@ -128,7 +128,7 @@ public class LevelBuilder : EditorWindow
             //GameObject gameObject = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
 
             LayerMask layer = LayerMask.GetMask("Ground");
-            if (Physics.BoxCast(position + Vector3.up * 10, prefab.GetComponent<Collider>().bounds.size, -Vector3.up, Quaternion.identity, 10f, layer))
+            if (Physics.BoxCast(position + Vector3.up*10, prefab.GetComponent<Collider>().bounds.size, -Vector3.up, Quaternion.identity, 10f, layer))
             {
                 _createdObject = Instantiate(prefab);
                 _createdObject.layer = LayerMask.NameToLayer("Build");
