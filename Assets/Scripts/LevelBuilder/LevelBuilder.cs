@@ -5,9 +5,11 @@ using UnityEditor;
 
 public class LevelBuilder : EditorWindow
 {
-    private const string _path1 = "Assets/Editor Resources/Buildings";
-    private const string _path2 = "Assets/Editor Resources/Buildings";
-    private const string _path3 = "Assets/Editor Resources/Buildings";
+    private const string _builds = "Assets/Editor Resources/Buildings";
+    private const string _decor = "Assets/Editor Resources/Decor";
+    private const string _vehicles = "Assets/Editor Resources/Vehicles";
+    private int _selectedTabNumber = 0;
+    private string[] _tabNames = { "Buildings", "Decor", "Vehicles" };
 
     private Vector2 _scrollPosition;
     private int _selectedElement;
@@ -18,9 +20,9 @@ public class LevelBuilder : EditorWindow
     private GameObject _createdObject;
     private GameObject _parent;
     private GameObject _tempParent;
-    private GameObject _prefab;
+    private GameObject _tempPrefab;
 
-    [MenuItem("Level/Builder")]
+    [MenuItem("Level/MilitaryBaseBuild")]
     private static void ShowWindow()
     {
         GetWindow(typeof(LevelBuilder));
@@ -29,14 +31,22 @@ public class LevelBuilder : EditorWindow
     private void OnFocus()
     {
         SceneView.duringSceneGui -= OnSceneGUI;
-        SceneView.duringSceneGui += OnSceneGUI; //каждый кадр вызывается Ons
-        RefreshCatalog();
+        SceneView.duringSceneGui += OnSceneGUI;
+    }
+
+    private void OnDisable()
+    {
+        if (_tempParent != null && _tempParent.transform.childCount != 0)
+        {
+            DestroyImmediate(_tempParent.transform.GetChild(0).gameObject);
+        }
     }
 
     private void OnGUI()
     {
         _parent = (GameObject)EditorGUILayout.ObjectField("Parent", _parent, typeof(GameObject), true);
         _tempParent = (GameObject)EditorGUILayout.ObjectField("Temp parent", _tempParent, typeof(GameObject), true);
+        ChooseTabs();
         if (_parent != null && _tempParent != null)
         {
             if (_selectedElement != _currentElement)
@@ -45,26 +55,23 @@ public class LevelBuilder : EditorWindow
                 {
                     DestroyImmediate(_tempParent.transform.GetChild(0).gameObject);
                 }
-                _prefab = Instantiate(_catalog[_selectedElement]);                
-                _prefab.transform.parent = _tempParent.transform;
+                _tempPrefab = Instantiate(_catalog[_selectedElement]);                
+                _tempPrefab.transform.parent = _tempParent.transform;
                 _currentElement = _selectedElement;
             }
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
             if (_createdObject != null)
             {
-                EditorGUILayout.LabelField("Created Object Settings");
-                Transform createdTransform = _createdObject.transform;
-
-                createdTransform.position = EditorGUILayout.Vector3Field("Position", createdTransform.position);
-                createdTransform.rotation = Quaternion.Euler(EditorGUILayout.Vector3Field("Position", createdTransform.rotation.eulerAngles));
-                createdTransform.localScale = EditorGUILayout.Vector3Field("Position", createdTransform.localScale);
+                EditorGUILayout.LabelField("Created Object Settings");                
             }
-
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
             _building = GUILayout.Toggle(_building, "Start building", "Button", GUILayout.Height(60));
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
             EditorGUILayout.BeginVertical(GUI.skin.window);
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
             DrawCatalog(GetCatalogIcons());
@@ -75,7 +82,7 @@ public class LevelBuilder : EditorWindow
 
     private void OnSceneGUI(SceneView sceneView)
     {
-        if (_building) //решжим постройки
+        if (_building)
         {
             if (Raycast(out Vector3 contactPoint))
             {
@@ -85,7 +92,6 @@ public class LevelBuilder : EditorWindow
                 {
                     CreateObject(contactPoint);
                 }
-
                 sceneView.Repaint();
             }
         }
@@ -96,26 +102,51 @@ public class LevelBuilder : EditorWindow
         Ray guiRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
         contactPoint = Vector3.zero;
 
-        LayerMask layer = LayerMask.GetMask("Build");
         if (Physics.Raycast(guiRay, out RaycastHit raycastHit))
         {
-            if (raycastHit.collider.gameObject.layer != layer)
-            {
-                contactPoint = raycastHit.point;
-                return true;
-            }                                
+            contactPoint = raycastHit.point;
+            return true;            
         }
         return false;
     }
 
     private void DrawBuild(Vector3 position)
     {
-        _prefab.transform.position = position;
+        if (_tempPrefab != null)
+        {
+            _tempPrefab.transform.position = position;
+        }
+    }
+
+    private void ChooseTabs()
+    {
+        _selectedTabNumber = GUILayout.Toolbar(_selectedTabNumber, _tabNames);
+
+        switch (_selectedTabNumber)
+        {
+            case 0:
+                RefreshCatalog(_builds, _catalog);
+                break;
+            case 1:
+                RefreshCatalog(_decor, _catalog);
+                break;
+            case 2:
+                RefreshCatalog(_vehicles, _catalog);
+                break;
+        }
     }
 
     private bool CheckInput()
     {
         HandleUtility.AddDefaultControl(0);
+        if(Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.J)
+        {
+
+        }
+        if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.K)
+        {
+            _tempPrefab.transform.Translate(_tempPrefab.transform.rotation.x, _tempPrefab.transform.rotation.y*- Time.deltaTime, _tempPrefab.transform.rotation.z);
+        }
 
         return Event.current.type == EventType.MouseDown && Event.current.button == 0;
     }
@@ -124,20 +155,20 @@ public class LevelBuilder : EditorWindow
     {
         if (_selectedElement < _catalog.Count)
         {
-            GameObject prefab = _catalog[_selectedElement];
-            //GameObject gameObject = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
-
-            LayerMask layer = LayerMask.GetMask("Ground");
-            if (Physics.BoxCast(position + Vector3.up*10, prefab.GetComponent<Collider>().bounds.size, -Vector3.up, Quaternion.identity, 10f, layer))
+            GameObject prefab = _catalog[_selectedElement];           
+            LayerMask layer = LayerMask.GetMask("Build");
+            Collider[] colliders = Physics.OverlapBox(position, _tempPrefab.GetComponent<BoxCollider>().size / 2, Quaternion.identity, layer);
+            if (colliders.Length == 0)
             {
                 _createdObject = Instantiate(prefab);
                 _createdObject.layer = LayerMask.NameToLayer("Build");
                 _createdObject.transform.position = position;
                 _createdObject.transform.parent = _parent.transform;
+                _createdObject.transform.rotation = _tempPrefab.transform.rotation;
                 _createdObject.gameObject.GetComponent<BoxCollider>().enabled = true;
 
                 Undo.RegisterCreatedObjectUndo(_createdObject, "Create Building");
-            }       
+            }
         }
     }
 
@@ -160,13 +191,16 @@ public class LevelBuilder : EditorWindow
         return catalogIcons;
     }
 
-    private void RefreshCatalog()
+    private void RefreshCatalog(string path, List<GameObject> gameObjects)
     {
-        _catalog.Clear();
+        gameObjects.Clear();
 
-        System.IO.Directory.CreateDirectory(_path1);
-        string[] prefabFiles = System.IO.Directory.GetFiles(_path1, "*.prefab");
+        System.IO.Directory.CreateDirectory(path);
+        string[] prefabFiles = System.IO.Directory.GetFiles(path, "*.prefab");
         foreach (var prefabFile in prefabFiles)
-            _catalog.Add(AssetDatabase.LoadAssetAtPath(prefabFile, typeof(GameObject)) as GameObject);
+        {
+            gameObjects.Add(AssetDatabase.LoadAssetAtPath(prefabFile, typeof(GameObject)) as GameObject);
+        }            
     }
+
 }
