@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3320350}
   - component: {fileID: 2308248}
   - component: {fileID: -1153963014449193443}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Slab_3x3_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

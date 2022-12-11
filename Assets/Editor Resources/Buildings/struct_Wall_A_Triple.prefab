@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3392258}
   - component: {fileID: 2346968}
   - component: {fileID: 5404677439537032858}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Wall_A_Triple
   m_TagString: Untagged
   m_Icon: {fileID: 0}

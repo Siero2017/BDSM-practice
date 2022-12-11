@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3373866}
   - component: {fileID: 2376884}
   - component: {fileID: 7180658878794673959}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Silo_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

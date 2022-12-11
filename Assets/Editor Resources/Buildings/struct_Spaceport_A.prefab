@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3312226}
   - component: {fileID: 2369422}
   - component: {fileID: -1391543665845081635}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Spaceport_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

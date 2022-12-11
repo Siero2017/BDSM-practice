@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 462912}
   - component: {fileID: 3345958}
   - component: {fileID: 2316044}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Construction_Yard_A_Crane_Arm_Lower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 466704}
   - component: {fileID: 3363090}
   - component: {fileID: 2338524}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Construction_Yard_A_Crane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 3378768}
   - component: {fileID: 2313824}
   - component: {fileID: -3346746761021660442}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Construction_Yard_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 423950}
   - component: {fileID: 3368794}
   - component: {fileID: 2386196}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Construction_Yard_A_Crane_Claw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 434950}
   - component: {fileID: 3385020}
   - component: {fileID: 2373580}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Construction_Yard_A_Crane_Arm_Upper
   m_TagString: Untagged
   m_Icon: {fileID: 0}

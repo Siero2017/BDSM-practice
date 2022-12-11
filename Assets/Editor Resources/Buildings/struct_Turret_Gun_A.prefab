@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 439182}
   - component: {fileID: 3336368}
   - component: {fileID: 2344280}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Turret_Gun_A_Mount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 408680}
   - component: {fileID: 3354470}
   - component: {fileID: 2310144}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Turret_Gun_A_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 3382794}
   - component: {fileID: 2316348}
   - component: {fileID: 8645793990737023720}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Turret_Gun_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

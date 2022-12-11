@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3326518}
   - component: {fileID: 2334388}
   - component: {fileID: 4395109661643569503}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Barracks_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

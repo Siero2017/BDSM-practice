@@ -139,13 +139,23 @@ public class LevelBuilder : EditorWindow
     private bool CheckInput()
     {
         HandleUtility.AddDefaultControl(0);
-        if(Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.J)
-        {
 
+        if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.J)
+        {
+            _tempPrefab.transform.Rotate(new Vector3(0, 0, 5));
         }
         if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.K)
         {
-            _tempPrefab.transform.Translate(_tempPrefab.transform.rotation.x, _tempPrefab.transform.rotation.y*- Time.deltaTime, _tempPrefab.transform.rotation.z);
+            _tempPrefab.transform.Rotate(new Vector3(0, 0, -5));
+        }
+
+        if(Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.N)
+        {
+            _tempPrefab.transform.localScale += Vector3.one / 2;
+        }
+        if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.M)
+        {
+            _tempPrefab.transform.localScale += -Vector3.one / 2;
         }
 
         return Event.current.type == EventType.MouseDown && Event.current.button == 0;
@@ -161,10 +171,10 @@ public class LevelBuilder : EditorWindow
             if (colliders.Length == 0)
             {
                 _createdObject = Instantiate(prefab);
-                _createdObject.layer = LayerMask.NameToLayer("Build");
                 _createdObject.transform.position = position;
                 _createdObject.transform.parent = _parent.transform;
                 _createdObject.transform.rotation = _tempPrefab.transform.rotation;
+                _createdObject.transform.localScale = _tempPrefab.transform.localScale;
                 _createdObject.gameObject.GetComponent<BoxCollider>().enabled = true;
 
                 Undo.RegisterCreatedObjectUndo(_createdObject, "Create Building");

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3304168}
   - component: {fileID: 2302710}
   - component: {fileID: 8323287615965593662}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: struct_Wall_A_Quadruple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
