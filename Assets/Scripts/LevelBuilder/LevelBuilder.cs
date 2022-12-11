@@ -167,17 +167,20 @@ public class LevelBuilder : EditorWindow
         {
             GameObject prefab = _catalog[_selectedElement];           
             LayerMask layer = LayerMask.GetMask("Build");
-            Collider[] colliders = Physics.OverlapBox(position, _tempPrefab.GetComponent<BoxCollider>().size / 2, Quaternion.identity, layer);
-            if (colliders.Length == 0)
+            if (prefab != null)
             {
-                _createdObject = Instantiate(prefab);
-                _createdObject.transform.position = position;
-                _createdObject.transform.parent = _parent.transform;
-                _createdObject.transform.rotation = _tempPrefab.transform.rotation;
-                _createdObject.transform.localScale = _tempPrefab.transform.localScale;
-                _createdObject.gameObject.GetComponent<BoxCollider>().enabled = true;
+                Collider[] colliders = Physics.OverlapBox(position, _tempPrefab.GetComponent<BoxCollider>().size / 2, Quaternion.identity, layer);
+                if (colliders.Length == 0)
+                {
+                    _createdObject = Instantiate(prefab);
+                    _createdObject.transform.position = position;
+                    _createdObject.transform.parent = _parent.transform;
+                    _createdObject.transform.rotation = _tempPrefab.transform.rotation;
+                    _createdObject.transform.localScale = _tempPrefab.transform.localScale;
+                    _createdObject.gameObject.GetComponent<BoxCollider>().enabled = true;
 
-                Undo.RegisterCreatedObjectUndo(_createdObject, "Create Building");
+                    Undo.RegisterCreatedObjectUndo(_createdObject, "Create Building");
+                }
             }
         }
     }
